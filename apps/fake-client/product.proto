@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package product;
+
+service ProductsService {
+    rpc FindOne(FindOneProductRequest) returns (Product) {}
+}
+
+message FindOneProductRequest {
+    string id = 1;
+}
+
+message Product {
+    string id = 1;
+    string name = 2;
+    string uom = 3;
+    double unitPrice = 4;
+    int32 stock = 5;
+}

@@ -1,5 +1,7 @@
+import { ReflectionService } from '@grpc/reflection';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 import { ProductModule } from './product.module';
 
 // hybrid service setup (HTTP + TCP)
@@ -18,6 +20,20 @@ async function bootstrap() {
     options: {
       servers: [`nats://localhost:4222`],
       queue: `products_queue`,
+    },
+  });
+
+  // gRPC transport
+  const protoPath = join(__dirname, `../../../apps/product/product.proto`);
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: `product`,
+      protoPath: protoPath,
+      url: `localhost:5001`,
+      onLoadPackageDefinition: (pkg, server) => {
+        new ReflectionService(pkg).addToServer(server);
+      },
     },
   });
 

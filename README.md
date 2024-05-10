@@ -58,6 +58,10 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+## Known Issue
+
+further enhancement can be done with bundling tool like webpack or swc to copy .proto files to output directory for deployment purpose.
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).

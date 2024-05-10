@@ -1,7 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { diKeys } from './common/keys';
+import { FindOneProductRequest } from './dtos/find-one-product.request';
 import { FakeProductRepo } from './fake/fake-product';
 import { Product } from './models/product';
+
+export interface IProductService {
+  findOne(dto: FindOneProductRequest): Observable<Product>;
+}
 
 // in real world application these methods may query data from db, thus async is used
 @Injectable()

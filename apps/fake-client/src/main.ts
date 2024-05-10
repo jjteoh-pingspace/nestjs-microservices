@@ -30,6 +30,15 @@ async function bootstrap() {
     },
   });
 
+  // // gRPC transport
+  // app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.GRPC,
+  //   options: {
+  //     package: `product`,
+  //     protoPath: join(__dirname, `product.proto`),
+  //   },
+  // });
+
   await app.startAllMicroservices();
 
   await app.listen(3002); // this is for HTTP server
