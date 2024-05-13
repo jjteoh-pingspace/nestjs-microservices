@@ -62,6 +62,8 @@ $ yarn run test:cov
 
 further enhancement can be done with bundling tool like webpack or swc to copy .proto files to output directory for deployment purpose.
 
+you may use tools like [ts-proto](https://github.com/stephenh/ts-proto/blob/main/NESTJS.markdown) to generate Typescript interface from .proto file
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).

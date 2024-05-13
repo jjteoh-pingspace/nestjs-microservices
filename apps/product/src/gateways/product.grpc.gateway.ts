@@ -1,6 +1,11 @@
 import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
 import { Controller, UseFilters, UseInterceptors } from '@nestjs/common';
-import { GrpcMethod, RpcException } from '@nestjs/microservices';
+import {
+  GrpcMethod,
+  GrpcStreamMethod,
+  RpcException,
+} from '@nestjs/microservices';
+import { Observable, Subject } from 'rxjs';
 import { FindOneProductRequest } from '../dtos/find-one-product.request';
 import { MyCustomRpcExceptionFilter } from '../filters/rpc-exception.filter';
 import { LoggingInterceptor } from '../interceptors/logging.interceptor';
@@ -37,5 +42,33 @@ export class ProductGRPCGateway {
     }
 
     return product;
+  }
+
+  @GrpcStreamMethod(`ProductsService`, `FindMany`)
+  findMany(
+    dto$: Observable<FindOneProductRequest>,
+    metadata: Metadata,
+  ): Observable<Product> {
+    console.log(`metadata`, metadata);
+    console.log(`token`, metadata.get(`authorization`)); // this can be use for auth
+
+    const product$ = new Subject<Product>();
+
+    const onNext = async (dto: FindOneProductRequest) => {
+      // query data
+      const product = await this._productService.findOneById(dto.id);
+
+      // push to stream
+      product$.next(product);
+    };
+
+    const onComplete = () => product$.complete();
+
+    dto$.subscribe({
+      next: onNext,
+      complete: onComplete,
+    });
+
+    return product$.asObservable();
   }
 }

@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { join } from 'path';
 
 import { diKeys } from './common/keys';
 import { FakeProductRepo } from './fake/fake-product';
@@ -18,32 +16,9 @@ const gateways = [
   ProductGRPCGateway,
 ];
 
-const protoPath = join(__dirname, `../../../apps/product/product.proto`);
-
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: diKeys.TCP_CLIENT,
-        transport: Transport.TCP,
-      },
-      {
-        name: diKeys.NATS_CLIENT,
-        transport: Transport.NATS,
-        options: {
-          inboxPrefix: `nat`, // there is a bug in nestjs/microservices lib, if inboxPrefix is not provided, error will be thrown
-        },
-      },
-      {
-        name: diKeys.GRPC_CLIENT,
-        transport: Transport.GRPC,
-        options: {
-          package: `product`,
-          protoPath,
-          url: `localhost:5001`,
-        },
-      },
-    ]),
+    // no need ClientsModule, because this is server
   ],
   controllers: gateways,
   providers: [

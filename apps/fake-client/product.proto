@@ -3,7 +3,8 @@ syntax = "proto3";
 package product;
 
 service ProductsService {
-    rpc FindOne(FindOneProductRequest) returns (Product) {}
+    rpc FindOne(FindOneProductRequest) returns (Product);
+    rpc FindMany(stream FindOneProductRequest) returns (stream Product);
 }
 
 message FindOneProductRequest {
@@ -17,3 +18,5 @@ message Product {
     double unitPrice = 4;
     int32 stock = 5;
 }
+
+
